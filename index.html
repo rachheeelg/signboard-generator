@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Signmator</title>
+    <link rel="stylesheet" href="home.css">
+</head>
+<body>
+<section class="track">
+  <div class="sticky">
+    <div class="bands"></div>
+    <svg class="grain" aria-hidden="true">
+      <filter id="n"><feTurbulence type="fractalNoise" baseFrequency="0.9" numOctaves="3" stitchTiles="stitch"/><feColorMatrix type="saturate" values="0"/></filter>
+      <rect width="100%" height="100%" filter="url(#n)"/>
+    </svg>
+    <div class="topfade" aria-hidden="true"></div>
+    <h1 class="lockup" aria-label="The Signmator">
+      <span class="the" aria-hidden="true">The</span>
+      <span class="slot" aria-hidden="true"></span>
+      <span aria-hidden="true">Signmator</span>
+    </h1>
+  </div>
+</section>
+<nav class="toolbar">
+  <button data-tool="type" aria-pressed="false" aria-label="Type">
+    <svg class="icon-outline"> <!-- outline T --> </svg>
+    <svg class="icon-filled">  <!-- filled T --> </svg>
+  </button>
+
+  <button data-tool="warp" aria-pressed="false" aria-label="Warp">
+    <svg class="icon-outline"> <!-- outline warp --> </svg>
+    <svg class="icon-filled">  <!-- filled warp --> </svg>
+  </button>
+
+  <button data-tool="draw" aria-pressed="false" aria-label="Draw">
+    <svg class="icon-outline"> <!-- outline pencil --> </svg>
+    <svg class="icon-filled">  <!-- filled pencil --> </svg>
+  </button>
+
+  <button data-tool="grid" aria-pressed="false" aria-label="Grid">
+    <svg class="icon-outline"> <!-- outline grid --> </svg>
+    <svg class="icon-filled">  <!-- filled grid --> </svg>
+  </button>
+
+  <button data-tool="color" aria-pressed="false" aria-label="Color">
+    <svg class="icon-outline"> <!-- outline circles --> </svg>
+    <svg class="icon-filled">  <!-- filled circles --> </svg>
+  </button>
+
+  <button data-tool="lang" aria-pressed="false" aria-label="Language">
+    <svg class="icon-outline"> <!-- outline A/文 --> </svg>
+    <svg class="icon-filled">  <!-- filled A/文 --> </svg>
+  </button>
+</nav>
+    <script rel="script" src="script.js"></script>
+</body>
+</html>
