@@ -1,58 +1,171 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>The Signmator</title>
-    <link rel="stylesheet" href="home.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>The Signmator</title>
+  <link rel="stylesheet" href="home.css">
+  <script src="script.js" defer></script>
 </head>
 <body>
-<section class="track">
-  <div class="sticky">
-    <div class="bands"></div>
-    <svg class="grain" aria-hidden="true">
-      <filter id="n"><feTurbulence type="fractalNoise" baseFrequency="0.9" numOctaves="3" stitchTiles="stitch"/><feColorMatrix type="saturate" values="0"/></filter>
-      <rect width="100%" height="100%" filter="url(#n)"/>
-    </svg>
-    <div class="topfade" aria-hidden="true"></div>
-    <h1 class="lockup" aria-label="The Signmator">
-      <span class="the" aria-hidden="true">The</span>
-      <span class="slot" aria-hidden="true"></span>
-      <span aria-hidden="true">Signmator</span>
-    </h1>
-  </div>
-</section>
-<nav class="toolbar">
-  <button data-tool="type" aria-pressed="false" aria-label="Type">
-    <svg class="icon-outline"> <!-- outline T --> </svg>
-    <svg class="icon-filled">  <!-- filled T --> </svg>
-  </button>
+  <section class="track">
+    <div class="sticky">
+      <div class="bands"></div>
 
-  <button data-tool="warp" aria-pressed="false" aria-label="Warp">
-    <svg class="icon-outline"> <!-- outline warp --> </svg>
-    <svg class="icon-filled">  <!-- filled warp --> </svg>
-  </button>
+      <svg class="grain" aria-hidden="true">
+        <defs>
+          <filter id="n">
+            <feTurbulence type="fractalNoise" baseFrequency="0.9" numOctaves="3" stitchTiles="stitch"/>
+            <feColorMatrix type="saturate" values="0"/>
+          </filter>
+        </defs>
+        <rect width="100%" height="100%" filter="url(#n)"/>
+      </svg>
 
-  <button data-tool="draw" aria-pressed="false" aria-label="Draw">
-    <svg class="icon-outline"> <!-- outline pencil --> </svg>
-    <svg class="icon-filled">  <!-- filled pencil --> </svg>
-  </button>
+      <div class="topfade" aria-hidden="true"></div>
 
-  <button data-tool="grid" aria-pressed="false" aria-label="Grid">
-    <svg class="icon-outline"> <!-- outline grid --> </svg>
-    <svg class="icon-filled">  <!-- filled grid --> </svg>
-  </button>
+      <h1 class="lockup" aria-label="The Signmator">
+        <span class="the" aria-hidden="true">The</span>
+        <span class="slot" aria-hidden="true"></span>
+        <span aria-hidden="true">Signmator</span>
+      </h1>
 
-  <button data-tool="color" aria-pressed="false" aria-label="Color">
-    <svg class="icon-outline"> <!-- outline circles --> </svg>
-    <svg class="icon-filled">  <!-- filled circles --> </svg>
-  </button>
+      <!-- CANVAS: inside .sticky so it stays on screen -->
+      <div id="canvas"></div>
 
-  <button data-tool="lang" aria-pressed="false" aria-label="Language">
-    <svg class="icon-outline"> <!-- outline A/文 --> </svg>
-    <svg class="icon-filled">  <!-- filled A/文 --> </svg>
-  </button>
-</nav>
-    <script rel="script" src="script.js"></script>
+      <nav class="toolbar">
+        <div class="nav-item">
+          <button type="button" data-tool="size" aria-label="Size">
+            <img class="icon-off" src="assets/size-no-fill.svg" alt="">
+            <img class="icon-on"  src="assets/size-fill.svg" alt="">
+          </button>
+        </div>
+
+         <div class="nav-item">
+          <button type="button" data-tool="colour" aria-label="Colour">
+            <img class="icon-off" src="assets/colour-nofill.svg" alt="">
+            <img class="icon-on"  src="assets/colour-fill.svg" alt="">
+          </button>
+        </div>
+        
+        <div class="nav-item">
+          <button type="button" data-tool="lang" aria-label="Language">
+            <img class="icon-off" src="assets/lang-no-fill.svg" alt="">
+            <img class="icon-on"  src="assets/lang-fill.svg" alt="">
+          </button>
+        </div>
+
+        <div class="nav-item">
+          <button type="button" data-tool="type" aria-label="Type">
+            <img class="icon-off" src="assets/type-nofill.svg" alt="">
+            <img class="icon-on"  src="assets/type-fill.svg" alt="">
+          </button>
+        </div>
+
+        <div class="nav-item">
+          <button type="button" data-tool="draw" aria-label="Draw">
+            <img class="icon-off" src="assets/pen-nofill.svg" alt="">
+            <img class="icon-on"  src="assets/pen-fill.svg" alt="">
+          </button>
+        </div>
+
+        <div class="nav-item">
+          <button type="button" data-tool="pattern" aria-label="Pattern">
+            <img class="icon-off" src="assets/pattern-no-fill.svg" alt="">
+            <img class="icon-on"  src="assets/pattern-fill.svg" alt="">
+          </button>
+        </div>
+
+      </nav>
+    </div>
+  </section>
+
+  <!-- SIZE SIDEBAR (position: fixed, so it can live out here) -->
+  <aside class="sidebar" id="sidebar">
+    <section class="panel" data-panel="size">
+      <div class="ratio-grid" id="ratioGrid"></div>
+      <div class="sliders">
+        <label for="canvasW">CANVAS WIDTH</label>
+        <input type="range" id="canvasW" min="200" max="1200" value="1070">
+        <label for="canvasH">CANVAS HEIGHT</label>
+        <input type="range" id="canvasH" min="200" max="900" value="665">
+        <label for="canvasR">CORNER RADIUS</label>
+        <input type="range" id="canvasR" min="0" max="200" value="0">
+      </div>
+    </section>
+
+    <!-- COLOUR PANEL -->
+    <section class="panel" data-panel="colour">
+      <p class="panel-label">COLOR PICKER</p>
+      <div class="cp-area" id="cpArea">
+        <div class="cp-handle" id="cpAreaHandle" tabindex="0" role="slider"
+             aria-label="Saturation and brightness: arrow keys to adjust"></div>
+      </div>
+      <div class="cp-hue" id="cpHue">
+        <div class="cp-handle" id="cpHueHandle" tabindex="0" role="slider"
+             aria-label="Hue" aria-valuemin="0" aria-valuemax="360"></div>
+      </div>
+
+      <p class="panel-label swatch-label">OR PICK A COLOR FROM HERE!</p>
+      <div class="swatches" id="swatches"></div>
+    </section>
+
+    <!-- LANGUAGE PANEL: three steps that reveal one after another -->
+    <section class="panel lang-panel" data-panel="lang">
+
+      <!-- step 1: how many lines -->
+      <div class="lang-step">
+        <h2 class="lang-h">LINE OF TEXT</h2>
+        <div class="opt-grid" id="lineOpts">
+          <button type="button" class="opt" data-lines="1" aria-pressed="false">
+            <span class="opt-lines" aria-hidden="true"><i></i></span>
+            <span class="opt-label">SINGLE</span>
+          </button>
+          <button type="button" class="opt" data-lines="2" aria-pressed="false">
+            <span class="opt-lines" aria-hidden="true"><i></i><i></i></span>
+            <span class="opt-label">DOUBLE</span>
+          </button>
+          <button type="button" class="opt" data-lines="3" aria-pressed="false">
+            <span class="opt-lines" aria-hidden="true"><i></i><i></i><i></i></span>
+            <span class="opt-label">TRIPLE</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- step 2: languages (appears after a line option is picked) -->
+      <div class="lang-sheet">
+        <div class="reveal" id="revealLangs">
+          <div class="reveal-inner">
+            <h2 class="lang-h">LANGUAGE SELECTION</h2>
+            <p class="lang-note">YOU MAY PICK MORE THAN 1 LANGUAGE!</p>
+            <div class="opt-grid" id="langOpts">
+              <button type="button" class="opt opt-lang" data-lang="en" aria-pressed="false">
+                <span class="glyph" lang="en" aria-hidden="true">Aa</span>
+                <span class="opt-label">ENGLISH</span>
+              </button>
+              <button type="button" class="opt opt-lang" data-lang="zh" aria-pressed="false">
+                <span class="glyph" lang="zh" aria-hidden="true">汉字</span>
+                <span class="opt-label" lang="zh">中文</span>
+              </button>
+              <button type="button" class="opt opt-lang" data-lang="es" aria-pressed="false">
+                <span class="glyph" lang="es" aria-hidden="true">ÑN</span>
+                <span class="opt-label" lang="es">ESPAÑOL</span>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- step 3: text boxes (appears after a language is picked) -->
+      <div class="lang-sheet sheet-last">
+        <div class="reveal" id="revealInput">
+          <div class="reveal-inner">
+            <h2 class="lang-h">TEXT INPUT</h2>
+            <div id="textInputs"></div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </aside>
 </body>
 </html>
