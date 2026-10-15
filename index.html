@@ -5,6 +5,17 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>The Signmator</title>
   <link rel="stylesheet" href="home.css">
+  <!-- Adobe Fonts kit: Brush Script, Cheap Pine, Choc, FZ Hei -->
+  <script>
+    (function(d) {
+      var config = {
+        kitId: 'hgn3ysl',
+        scriptTimeout: 3000,
+        async: true
+      },
+      h=d.documentElement,t=setTimeout(function(){h.className=h.className.replace(/\bwf-loading\b/g,"")+" wf-inactive";},config.scriptTimeout),tk=d.createElement("script"),f=false,s=d.getElementsByTagName("script")[0],a;h.className+=" wf-loading";tk.src='https://use.typekit.net/'+config.kitId+'.js';tk.async=true;tk.onload=tk.onreadystatechange=function(){a=this.readyState;if(f||a&&a!="complete"&&a!="loaded")return;f=true;clearTimeout(t);try{Typekit.load(config)}catch(e){}};s.parentNode.insertBefore(tk,s)
+    })(document);
+  </script>
   <script src="script.js" defer></script>
 </head>
 <body>
@@ -63,13 +74,6 @@
         </div>
 
         <div class="nav-item">
-          <button type="button" data-tool="draw" aria-label="Draw">
-            <img class="icon-off" src="assets/pen-nofill.svg" alt="">
-            <img class="icon-on"  src="assets/pen-fill.svg" alt="">
-          </button>
-        </div>
-
-        <div class="nav-item">
           <button type="button" data-tool="pattern" aria-label="Pattern">
             <img class="icon-off" src="assets/pattern-no-fill.svg" alt="">
             <img class="icon-on"  src="assets/pattern-fill.svg" alt="">
@@ -77,6 +81,12 @@
         </div>
 
       </nav>
+
+      <!-- bottom right: about + download -->
+      <div class="page-actions">
+        <button type="button" class="page-btn" data-tool="about">LEARN MORE</button>
+        <button type="button" class="page-btn" id="downloadBtn">DOWNLOAD</button>
+      </div>
     </div>
   </section>
 
@@ -165,6 +175,30 @@
           </div>
         </div>
       </div>
+    </section>
+
+    <!-- ABOUT PANEL (opened by LEARN MORE) -->
+    <section class="panel about-panel" data-panel="about">
+      <h2 class="about-h">WHAT IS THIS PROJECT?</h2>
+      <p>The Signmator is a playful follow-up to my book, The Visual Language of Immigrant Neighborhoods in New York City, which looks at how signboards across the city’s ethnic enclaves — from Sunset Park and Chinatown to the stretch of Queens along the 7 train — carry meaning far beyond the names of the businesses they announce. Hand-painted letters, saturated colors, crowded layouts, and multiple languages stacked on a single storefront all speak to who a neighborhood belongs to, where its people came from, and what they’ve built here.</p>
+      <p>While researching the book, I found myself drawn not just to the signs, but to the visual traditions behind them. Every motif in this generator was hand-drawn by me (Rachel), drawing on posters, packaging, and historical ephemera from across Asia and Latin America. These are the borders, ornaments, and illustrative details that quietly travel with communities and resurface on awnings and shop windows thousands of miles from where they began.</p>
+      <p>This tool is an invitation to play with that visual language yourself. Mix type, color, and motifs to build your own signboard, and along the way, notice the choices that make these signs so distinct, and so worth preserving as neighborhoods change around them.</p>
+    </section>
+
+    <!-- TYPE PANEL: one Latin + one Chinese font -->
+    <section class="panel type-panel" data-panel="type">
+      <p class="panel-label type-label">LATIN FONTS</p>
+      <div class="font-list" id="latinFonts"></div>
+      <p class="panel-label type-label type-label-cjk">CHINESE FONTS</p>
+      <div class="font-list" id="cjkFonts"></div>
+    </section>
+
+    <!-- PATTERN PANEL: choose the motif -->
+    <section class="panel pattern-panel" data-panel="pattern">
+      <p class="panel-label">PATTERN DESIGN</p>
+      <div class="motif-grid" id="motifGrid"></div>
+      <!-- steps through the layouts -->
+      <button type="button" class="layout-btn" id="regenerate">LAY ME OUT!</button>
     </section>
   </aside>
 </body>

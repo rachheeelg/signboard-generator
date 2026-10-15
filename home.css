@@ -239,7 +239,7 @@ body {
   background-color: #f6f1ea;
   /* outer edge: drawn on top of the outermost grid lines, so it curves
      with the corner radius instead of leaving open ends */
-  outline: 1px solid var(--grid-line, #C3371A);
+  outline: 1px solid var(--grid-line, #000);
   outline-offset: -1px;
 }
 
@@ -250,8 +250,8 @@ body {
   position: absolute;
   inset: 0;
   background-image:
-    linear-gradient(to right,  var(--grid-line, #C3371A) 1px, transparent 1px),
-    linear-gradient(to bottom, var(--grid-line, #C3371A) 1px, transparent 1px);
+    linear-gradient(to right,  var(--grid-line, #000) 1px, transparent 1px),
+    linear-gradient(to bottom, var(--grid-line, #000) 1px, transparent 1px);
   background-size: var(--cell) var(--cell);
   pointer-events: none;
   transition: opacity .3s ease;
@@ -266,16 +266,19 @@ body {
 }
 
 .sidebar {
-  --sb-red: #C3371A;
-  --sb-pink: #FFB3A6;
-  --sb-pink-hover: #ffc8bf;
-  --sb-width: 490px;
+  /* minimal beige + black theme (red only marks what's selected) */
+  --sb-ink: #221F20;              /* black: text, lines, borders, shapes */
+  --sb-bg: #F6F1EA;               /* beige */
+  --sb-hover: rgba(34, 31, 32, .05);
+  --sb-accent: #C3371A;           /* red: selected state */
+  --sb-width: 403px;
  
   position: fixed;
   inset: 0 auto 0 0;
   width: var(--sb-width);
-  background: var(--sb-red);
-  padding: 28px;
+  background: var(--sb-bg);
+  border-right: 1px solid var(--sb-ink);
+  padding: 0;
   box-sizing: border-box;
   transform: translateX(-100%);     
   transition: transform .35s ease;
@@ -290,12 +293,11 @@ body {
  
 .sidebar .panel {
   height: 100%;
-  background: var(--sb-pink);
-  border-radius: 12px;
-  padding: 24px;            /* tighter (was 30px) */
-  display: none;                   
+  background: transparent;
+  padding: 28px 24px;
+  display: none;
   flex-direction: column;
-  color: var(--sb-red);
+  color: var(--sb-ink);
 }
 .sidebar .panel.active { display: flex; overflow: hidden; }
 
@@ -305,52 +307,48 @@ body {
 .sidebar .ratio-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 12px;                /* tighter (was 16px) */
+  gap: 17px;
 }
 .sidebar .ratio {
-  aspect-ratio: 6 / 7;      /* shorter (was 4 / 5) */
-  background: var(--sb-pink);
-border-radius: 13px;
-border: 1px solid #C3371A;
-box-shadow: 2px 2px 5px 2px #C3371A;
+  aspect-ratio: 223 / 263;  /* from the new design */
+  background: transparent;
+  border-radius: 13px;
+  border: 1px solid var(--sb-ink);
+  padding: 20px 0 16px;
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
-  gap: 12px;                /* tighter (was 20px) */
+  justify-content: space-between;
+  gap: 12px;
   cursor: pointer;
   font: inherit;
   font-size: 17.6px;        /* -20% (was 22px) */
-  color: var(--sb-red);
+  color: var(--sb-ink);
 }
-.sidebar .ratio:hover { background: var(--sb-pink-hover); }
+.sidebar .ratio:hover { background: var(--sb-hover); }
 
-/* pressed + selected: colours reversed */
+/* selected: outline, shape and label turn red */
 .sidebar .ratio:active,
-.sidebar .ratio.selected {
-  background: var(--sb-red);
-}
+.sidebar .ratio.selected { border-color: var(--sb-accent); }
 .sidebar .ratio:active .shape,
-.sidebar .ratio.selected .shape {
-  background: var(--sb-pink);
-}
+.sidebar .ratio.selected .shape { background: var(--sb-accent); }
 .sidebar .ratio:active span,
-.sidebar .ratio.selected span {
-  color: var(--sb-pink);
-}
+.sidebar .ratio.selected span { color: var(--sb-accent); }
 .sidebar .ratio .shape-area {
+  flex: 1;
   display: flex;
   align-items: center;
   justify-content: center;
 }
 .sidebar .ratio .shape {
-  background: var(--sb-red);
-  border-radius: 10px;
+  background: var(--sb-ink);
+  border-radius: 13px;
+  transition: background .15s ease;
 }
 
 /* ADDED: ratio labels (16 : 9 etc.) from Figma */
 .sidebar .ratio span {
-  color: #C3371A;
+  color: var(--sb-ink);
   text-align: center;
   font-family: "EssentVariableTrial-Variable", sans-serif;
   font-size: 19.2px;        /* -20% (was 24px) */
@@ -362,9 +360,9 @@ box-shadow: 2px 2px 5px 2px #C3371A;
 .sidebar .sliders { margin-top: auto; }
 .sidebar .sliders label {
   display: block;
-  font-size: 14.4px;        /* -20% (was 18px) */
-  font-weight: 680;         /* bold, like the language panel headers */
-  margin: 18px 0 8px;       /* tighter (was 28px 0 12px) */
+  font-size: 16px;
+  font-weight: 520;
+  margin: 30px 0 14px;
 }
 /* ---------- sliders: thin line + hollow circle (from Figma) ---------- */
 .sidebar .sliders input[type=range] {
@@ -379,13 +377,13 @@ box-shadow: 2px 2px 5px 2px #C3371A;
 
 /* the line */
 .sidebar .sliders input[type=range]::-webkit-slider-runnable-track {
-  height: 1.5px;
-  background: var(--sb-red);
+  height: 1px;
+  background: var(--sb-ink);
   border: none;
 }
 .sidebar .sliders input[type=range]::-moz-range-track {
-  height: 1.5px;
-  background: var(--sb-red);
+  height: 1px;
+  background: var(--sb-ink);
   border: none;
 }
 .sidebar .sliders input[type=range]::-moz-range-progress {
@@ -398,34 +396,34 @@ box-shadow: 2px 2px 5px 2px #C3371A;
   appearance: none;
   width: 17px;
   height: 17px;
-  margin-top: -7.75px;        /* centres the circle on the line */
+  margin-top: -8px;           /* centres the circle on the line */
   border-radius: 50%;
-  background: var(--sb-pink);
-  border: 1.5px solid var(--sb-red);
+  background: var(--sb-bg);
+  border: 1px solid var(--sb-ink);
   box-sizing: border-box;
 }
 .sidebar .sliders input[type=range]::-moz-range-thumb {
   width: 17px;
   height: 17px;
   border-radius: 50%;
-  background: var(--sb-pink);
-  border: 1.5px solid var(--sb-red);
+  background: var(--sb-bg);
+  border: 1px solid var(--sb-ink);
   box-sizing: border-box;
 }
 
 /* keyboard focus ring (for accessibility) */
 .sidebar .sliders input[type=range]:focus { outline: none; }
 .sidebar .sliders input[type=range]:focus-visible::-webkit-slider-thumb {
-  outline: 2px solid var(--sb-red);
+  outline: 2px solid var(--sb-ink);
   outline-offset: 2px;
 }
 .sidebar .sliders input[type=range]:focus-visible::-moz-range-thumb {
-  outline: 2px solid var(--sb-red);
+  outline: 2px solid var(--sb-ink);
   outline-offset: 2px;
 }
  
 body.panel-open main {
-  padding-left: 490px;
+  padding-left: 403px;
   transition: padding-left .35s ease;
 }
 
@@ -433,10 +431,10 @@ body.panel-open main {
    COLOUR PANEL
    ============================================================ */
 .sidebar .panel-label {
-  font-size: 14.4px;        /* same size as the slider labels */
-  font-weight: 680;         /* bold, like the language panel headers */
-  margin: 0 0 12px;
-  color: var(--sb-red);
+  font-size: 18px;
+  font-weight: 520;
+  margin: 0 0 14px;
+  color: var(--sb-ink);
 }
 .sidebar .swatch-label { margin-top: 32px; }
 
@@ -479,15 +477,15 @@ body.panel-open main {
   pointer-events: none;
 }
 .sidebar .cp-handle:focus-visible {
-  outline: 2px solid var(--sb-red);
+  outline: 2px solid var(--sb-ink);
   outline-offset: 2px;
 }
 
-/* drop shadow on the picker, hue bar and swatches (from Figma) */
+/* minimal: thin black outline instead of drop shadows */
 .sidebar .cp-area,
 .sidebar .cp-hue,
 .sidebar .swatch {
-  box-shadow: 0 4px 4px 0 rgba(0, 0, 0, 0.25);
+  box-shadow: 0 0 0 1px var(--sb-ink);
 }
 
 /* suggested colours */
@@ -503,9 +501,9 @@ body.panel-open main {
   cursor: pointer;
 }
 .sidebar .swatch:hover { transform: translateY(-1px); }
-.sidebar .swatch.selected,
+/* no outline on the selected swatch; keyboard focus only */
 .sidebar .swatch:focus-visible {
-  outline: 2px solid var(--sb-red);
+  outline: 2px solid var(--sb-accent);
   outline-offset: 2px;
 }
 
@@ -520,8 +518,8 @@ body.panel-open main {
 .sidebar .lang-sheet {
   position: relative;
   border-radius: 25px 25px 0 0;   /* square bottom: the next drawer sits flush on top (no gap at the sides) */
-  background: rgba(255, 179, 166, 0.8);   /* #FFB3A6 at 80% (background only, so text stays solid) */
-  box-shadow: 0 8px 8px 0 #C3371A inset;
+  background: var(--sb-bg);
+  border-top: 1px solid var(--sb-ink);   /* minimal: a thin line instead of the inset shadow */
   padding: 22px 24px 47px;                 /* extra bottom room: the next sheet overlaps 25px */
 }
 .sidebar .lang-sheet.sheet-last {
@@ -533,9 +531,9 @@ body.panel-open main {
 
 /* headers + subheaders */
 .sidebar .lang-h {
-  color: #C3371A;
+  color: var(--sb-ink);
   font-family: "EssentVariableTrial-Variable", sans-serif;
-  font-size: 20px;
+  font-size: 18px;
   font-style: normal;
   font-weight: 680;
   line-height: normal;
@@ -543,7 +541,7 @@ body.panel-open main {
 }
 .sidebar .lang-note,
 .sidebar .text-field label {
-  color: #C3371A;
+  color: var(--sb-ink);
   font-family: "EssentVariableTrial-Variable", sans-serif;
   font-size: 16px;
   font-style: normal;
@@ -572,15 +570,14 @@ body.panel-open main {
                                 with 25px clear space above and below their contents) */
   padding: 0;
   border-radius: 13px;
-  border: 1px solid #C3371A;
-  box-shadow: 2px 2px 5px 2px #C3371A;
-  background: var(--sb-pink);
-  color: #C3371A;
+  border: 1px solid var(--sb-ink);
+  background: transparent;
+  color: var(--sb-ink);
   font-family: "EssentVariableTrial-Variable", sans-serif;
   cursor: pointer;
-  transition: background .15s ease, color .15s ease;
+  transition: background .15s ease, color .15s ease, border-color .15s ease;
 }
-.sidebar .opt:hover { background: var(--sb-pink-hover); }
+.sidebar .opt:hover { background: var(--sb-hover); }
 .sidebar .opt-label {
   color: inherit;
   text-align: center;
@@ -613,14 +610,14 @@ body.panel-open main {
   line-height: 1;
 }
 
-/* pressed + selected: colours reversed */
+/* selected: outline, icon and label turn red */
 .sidebar .opt:active,
 .sidebar .opt[aria-pressed="true"] {
-  background: #C3371A;
-  color: var(--sb-pink);
+  border-color: var(--sb-accent);
+  color: var(--sb-accent);
 }
 .sidebar .opt:focus-visible {
-  outline: 2px solid #C3371A;
+  outline: 2px solid var(--sb-ink);
   outline-offset: 3px;
 }
 
@@ -653,37 +650,256 @@ body.panel-open main {
   width: 100%;
   height: 32px;
   padding: 0 14px;
-  border: 1px solid #C3371A;
+  border: 1px solid var(--sb-ink);
   border-radius: 13px;
   background: transparent;
-  color: #C3371A;
+  color: var(--sb-ink);
   font-family: "EssentVariableTrial-Variable", sans-serif;
   font-size: 16px;
   font-weight: 520;
 }
-.sidebar .text-field input:focus { outline: none; }
+.sidebar .text-field input:focus,
 .sidebar .text-field input:focus-visible {
-  outline: 2px solid #C3371A;
-  outline-offset: 2px;
+  outline: none;
+  border-color: var(--sb-accent);   /* the active text box turns red instead of an outline */
 }
 
 /* ============================================================
    TEXT ON THE SIGN
    ============================================================ */
-.sign-text {
+.sign {
+  font-family: "EssentVariableTrial-Variable", sans-serif;
   position: absolute;
   inset: 0;
   z-index: 1;                    /* above the grid layer */
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
-  text-align: center;
-  white-space: nowrap;
-  font-family: "EssentVariableTrial-Variable", sans-serif;
-  font-weight: 520;
-  line-height: 1.1;
-  color: var(--grid-line, #C3371A);   /* switches to pink on a red sign, like the grid */
+  color: var(--sign-text, #C3371A);   /* curated partner of the sign colour (set in script.js) */
   pointer-events: none;
 }
-.sign-line:empty::before { content: "\00a0"; }   /* keeps empty lines' space */
+.sl-flex { flex: 1 1 0; min-height: 0; }
+.sl-text {
+  flex: none;
+  text-align: center;
+  font-family: inherit;               /* chosen in the type panel */
+  font-weight: var(--sign-weight, 600);
+  font-synthesis: none;               /* never fake-bold a display font */
+  line-height: 1.02;
+  overflow-wrap: normal;
+  word-break: normal;
+}
+.sl-cjk { word-break: keep-all; line-height: 1.12; }   /* Chinese stays together as a word */
+.sl-text[data-vertical] { line-height: 1.08; }
+.sl-pair {
+  flex: none;
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.sl-row {
+  flex: none;
+  width: 100%;              /* may be set wider than the text area in script.js */
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.sl-flank {
+  flex: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: inherit;
+}
+.sl-flank > .sl-text { width: auto !important; }
+.sl-flank { column-gap: 3.5%; }
+.motif {
+  display: block;
+  flex: none;
+  height: auto;
+  background: currentColor;          /* the motif takes the text colour... */
+  -webkit-mask: center / contain no-repeat;
+  mask: center / contain no-repeat;  /* ...through the shape of the SVG, e.g. url(assets/flower.svg) */
+}
+
+/* ============================================================
+   PATTERN PANEL (from Figma)
+   ============================================================ */
+.sidebar .pattern-panel { padding-left: 17px; padding-right: 17px; }
+.sidebar .motif-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+}
+.sidebar .motif-card {
+  width: 100%;
+  max-width: 369px;
+  height: 84px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 10.537px;
+  border: 1px solid var(--sb-ink);   /* same stroke as the ratio cards */
+  background: transparent;
+  color: var(--sb-ink);
+  cursor: pointer;
+  transition: background .15s ease, color .15s ease, border-color .15s ease;
+}
+.sidebar .motif-card .motif-preview {
+  height: 62px;
+  max-width: 120px;
+  background: currentColor;
+  -webkit-mask: center / contain no-repeat;
+  mask: center / contain no-repeat;
+}
+.sidebar .motif-card:hover { background: var(--sb-hover); }
+.sidebar .motif-card.selected { border-color: var(--sb-accent); color: var(--sb-accent); }
+
+/* LAY ME OUT! steps through the layouts */
+.sidebar .layout-btn {
+  margin-top: auto;
+  width: 100%;
+  height: 40px;
+  border: none;
+  border-radius: 10.537px;
+  background: var(--sb-accent);
+  color: var(--sb-bg);
+  font-family: inherit;
+  font-size: 16px;
+  font-weight: 500;                 /* medium */
+  cursor: pointer;
+  transition: background .15s ease;
+}
+.sidebar .layout-btn:hover { background: #a92e15; }
+.sidebar .layout-btn:focus-visible { outline: 2px solid var(--sb-ink); outline-offset: 3px; }
+
+/* ============================================================
+   TYPE PANEL (from Figma)
+   ============================================================ */
+.sidebar .type-panel { padding-left: 17px; padding-right: 17px; overflow: hidden; }
+.sidebar .type-label { font-size: 16px; text-transform: uppercase; }
+.sidebar .type-label-cjk { margin-top: clamp(14px, 4vh, 48px); }
+/* the two lists share the height, so all 13 cards always fit (no scrolling) */
+.sidebar .font-list {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  min-height: 0;
+}
+#latinFonts { flex: 7 1 0; }
+#cjkFonts   { flex: 5 1 0; }
+.sidebar .font-card {
+  flex: 1 1 0;               /* cards shrink together on short screens... */
+  min-height: 0;
+  max-height: 55px;          /* ...and are 55px tall when there's room */
+  width: 100%;
+  max-width: 369px;
+  container-type: size;      /* lets the label scale with the card */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 10.537px;
+  border: 1px solid var(--sb-ink);   /* same stroke as the ratio cards */
+  background: transparent;
+  color: var(--sb-ink);
+  font-size: 28px;
+  font-weight: normal;
+  font-synthesis: none;
+  line-height: 1;
+  cursor: pointer;
+  transition: background .15s ease, color .15s ease, border-color .15s ease;
+}
+.sidebar .font-card:hover { background: var(--sb-hover); }
+.sidebar .font-card[aria-pressed="true"] { border-color: var(--sb-accent); color: var(--sb-accent); }
+.sidebar .font-card:focus-visible { outline: 2px solid var(--sb-ink); outline-offset: 2px; }
+
+/* the font name scales down with its card */
+.sidebar .font-card .font-name {
+  display: block;            /* so it can be nudged to the true centre */
+  font-size: min(28px, 52cqh);
+  line-height: 1;
+  white-space: nowrap;
+}
+.sidebar #cjkFonts .font-card .font-name {
+  /* same visual size for every Chinese font (scale measured in script.js) */
+  font-size: calc(min(var(--cjk-size, 20px), 40cqh) * var(--cjk-scale, 1));
+}
+
+/* which line each picked font is for */
+.sidebar .font-card { position: relative; }
+.sidebar .font-card[data-pick]:not([data-pick=""])::after {
+  content: attr(data-pick);
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  font-family: "EssentVariableTrial-Variable", sans-serif;
+  font-size: 10px;
+  font-weight: 520;
+  letter-spacing: .04em;
+  color: var(--sb-accent);
+}
+
+/* ============================================================
+   LEARN MORE + DOWNLOAD (bottom right)
+   ============================================================ */
+.page-actions {
+  position: absolute;
+  right: 24px;
+  bottom: 30px;
+  z-index: 2;
+  display: flex;
+  gap: 10px;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity .4s ease, visibility .4s;
+}
+.sticky.docked .page-actions { opacity: 1; visibility: visible; }
+.page-btn {
+  padding: 11px 18px;
+  border: 1px solid #C3371A;
+  border-radius: 10px;
+  background: #F6F1EA;
+  color: #C3371A;
+  font-family: "EssentVariableTrial-Variable", sans-serif;
+  font-size: 13px;
+  font-weight: 520;
+  letter-spacing: .02em;
+  cursor: pointer;
+  transition: background .15s ease, color .15s ease;
+}
+/* pressed (and LEARN MORE while its panel is open): inverse red */
+.page-btn:active,
+.page-btn.active { background: #C3371A; color: #F6F1EA; }
+.page-btn:disabled { cursor: progress; }
+.page-btn:focus-visible { outline: 2px solid #221F20; outline-offset: 3px; }
+
+/* ============================================================
+   ABOUT PANEL
+   ============================================================ */
+/* about text: padding scales with the screen; the text size is fitted in script.js
+   so the whole text always shows without scrolling (scroll only as a last resort) */
+.sidebar .panel.about-panel.active {
+  --about-pad: clamp(18px, 3.6vh, 40px);
+  --about-size: 16px;
+  overflow-y: auto;
+  padding: var(--about-pad) clamp(18px, 6%, 32px) 0;
+}
+/* same space below the text as above the heading */
+.sidebar .about-panel p:last-child { margin-bottom: 0; padding-bottom: var(--about-pad); }
+.sidebar .about-h {
+  margin: 0 0 18px;
+  font-family: "Piragua-Bold", "Arial Narrow", sans-serif;
+  font-size: calc(var(--about-size) * 2.4);
+  font-weight: 700;
+  line-height: .95;
+  color: var(--sb-ink);
+}
+.sidebar .about-panel p {
+  margin: 0 0 1.2em;
+  font-size: var(--about-size);
+  font-weight: 400;
+  line-height: 1.33;
+  color: var(--sb-ink);
+}
