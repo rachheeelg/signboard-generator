@@ -32,8 +32,6 @@ body {
   font-family: var(--font);
 }
 
-/* ---------- Scroll stage ---------- */
-
 .track { height: 500vh; }
 
 .sticky {
@@ -41,7 +39,7 @@ body {
   top: 0;
   height: 100vh;
   overflow: hidden;
-  overflow: clip;   /* ADDED: like hidden, but the browser can't nudge it when something gets focus */
+  overflow: clip;   
 }
 
 .bands {
